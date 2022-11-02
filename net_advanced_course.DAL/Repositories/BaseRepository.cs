@@ -1,7 +1,7 @@
 ﻿using LiteDB;
 using Microsoft.Extensions.Options;
-using net_advanced_course.DAL.Settings;
 using net_advanced_course.DAL.Entities;
+using net_advanced_course.DAL.Settings;
 
 namespace net_advanced_course.DAL.Repositories
 {
@@ -28,7 +28,7 @@ namespace net_advanced_course.DAL.Repositories
             }
         }
 
-        public  IQueryable<TEntity> GetAll()
+        public IQueryable<TEntity> GetAll()
         {
             return _collection.FindAll().AsQueryable();
         }
