@@ -7,7 +7,7 @@ namespace net_advanced_course.API.Extensions
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddTransient<ICartingService, CartingService>();
+            services.AddTransient<ICartService, CartService>();
 
             return services;
         }

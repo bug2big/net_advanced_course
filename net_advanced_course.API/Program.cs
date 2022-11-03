@@ -1,4 +1,5 @@
 using net_advanced_course.API.Extensions;
+using net_advanced_course.DAL;
 
 namespace net_advanced_course
 {
@@ -8,6 +9,7 @@ namespace net_advanced_course
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddLiteDb();
             builder.Services.AddRepositories();
             builder.Services.AddServices();
 

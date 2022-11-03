@@ -1,51 +1,36 @@
-﻿using LiteDB;
-using Microsoft.Extensions.Options;
-using net_advanced_course.DAL.Entities;
-using net_advanced_course.DAL.Settings;
+﻿using net_advanced_course.DAL.Entities;
 
 namespace net_advanced_course.DAL.Repositories
 {
     public abstract class BaseRepository<TEntity> : IRepository<TEntity>
         where TEntity : BaseEntity
     {
-        protected readonly LiteDatabase _context = null!;
-        protected readonly ILiteCollection<TEntity> _collection;
+        protected readonly LiteDatabaseAsync _context = null!;
+        protected readonly ILiteCollectionAsync<TEntity> _collection;
 
-        public BaseRepository(IOptions<LiteDbSettings> liteDbSettingOptions)
+        public BaseRepository(LiteDbContextProvider liteDbContext)
         {
-            try
-            {
-                var db = new LiteDatabase(liteDbSettingOptions.Value.DatabasePath);
-                if (db != null)
-                    _context = db;
-
-                _collection = _context.GetCollection<TEntity>();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Can find or create LiteDb database.", ex);
-            }
+            _collection = liteDbContext.Context.GetCollection<TEntity>();
         }
 
-        public IQueryable<TEntity> GetAll()
+        public async Task<IQueryable<TEntity>> GetAllAsync()
         {
-            return _collection.FindAll().AsQueryable();
+            return (await _collection.FindAllAsync().ConfigureAwait(false)).AsQueryable();
         }
 
-        public TEntity GetById(Guid entityId)
+        public async Task<TEntity> GetByIdAsync(Guid entityId)
         {
-            return _collection.FindById(new BsonValue(entityId));
+            return await _collection.FindByIdAsync(new BsonValue(entityId));
         }
 
-        public void Delete(TEntity entity)
+        public async Task DeleteAsync(TEntity entity)
         {
-            _collection.Delete(new BsonValue(entity.Id));
+            await _collection.DeleteAsync(new BsonValue(entity.Id));
         }
 
-        public void Upsert(TEntity entity)
+        public async Task UpsertAsync(TEntity entity)
         {
-            _collection.Upsert(entity);
+            await _collection.UpsertAsync(entity);
         }
     }
 }

@@ -2,12 +2,12 @@
 {
     public interface IRepository<TEntity>
     {
-        IQueryable<TEntity> GetAll();
+        Task<IQueryable<TEntity>> GetAllAsync();
 
-        TEntity GetById(Guid entityId);
+        Task<TEntity> GetByIdAsync(Guid entityId);
 
-        void Delete(TEntity entity);
+        Task DeleteAsync(TEntity entity);
 
-        void Upsert(TEntity entity);
+        Task UpsertAsync(TEntity entity);
     }
 }
